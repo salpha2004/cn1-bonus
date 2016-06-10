@@ -1,10 +1,19 @@
 class Router6 extends Router {
 	
-	Router6 (Router myNext, Router myPrev) {
+	Router6 (String addr, Router myNext, Router myPrev) {
 		super();
+		this.addr = addr;
 		connectedRouters.add (myNext);
 		connectedRouters.add (myPrev);
 		type = "v6";
+	}
+
+	void pack (Packet packet) {
+		Packet original = new Packet(packet);
+		packet.setData (original);
+		packet.setVersionTo4 ();
+		packet.setSrc (addr);
+		//packet.setDst (); // TODO: how to find dst addr?
 	}
 
 	/* in practice, route function should only take the packet to route. next router
@@ -12,9 +21,10 @@ class Router6 extends Router {
 	@Override
 	public void route (Packet packet) {
 		Router next = super.nextRouter (packet);
+		/* ask the next router in the route if it supports IPv6. */
 		if (next.getType().equals ("v4")) {
 			if (packet.getVersion() == 6) {
-				// TODO: tunnel (pack)
+				pack (packet);
 			}
 			/* in case 'packet' was ipv6, it's wrapped in an ipv4 packet above,
 			and routed as a normal v4 packet.

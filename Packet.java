@@ -10,6 +10,20 @@ class Packet {
 		srcAddr = src;
 		dstAddr = dst;
 	}
+	Packet (Packet p) {
+		version = p.getVersion();
+		srcAddr = p.getSrc();
+		dstAddr = p.getDst();
+	}
+	void setSrc (String src) {
+		srcAddr = src;
+	}
+	void setData (byte[] newData) {
+		data = newData;
+	}
+	void setVersionTo4 () {
+		version = 4;
+	}
 	int getVersion () {
 		return version;
 	}
@@ -43,4 +57,5 @@ class Packet {
 		}
 		return maskedDstAddr;
 	}
+
 }

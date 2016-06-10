@@ -10,6 +10,7 @@ class Router {
 	HashMap<String, Integer> routingTable;
 	Vector<Router> connectedRouters;
 	String type;
+	String addr;
 
 	Router () {
 		routingTable = new HashMap<String, Integer> ();
