@@ -1,6 +1,6 @@
 class Packet {
-	// TODO: subnet mask was assumed to be 24 for all packets and omitted for simplicity. -> change getDstMasked if changed your thought.
-	// TODO: how is subnet mask implemented for ipv6?
+	// TODO: subnet mask was assumed to be 24 for all ipv4 packets
+	// and 64 for all ipv6 packets and omitted for simplicity. -> change getDstMasked if changed your thought.
 	int version;
 	String srcAddr;
 	String dstAddr;
@@ -19,9 +19,28 @@ class Packet {
 	String getDst () {
 		return dstAddr;
 	}
+	/* returns the address combined with subnet mask (denoted as 'X'). */
 	String getDstMasked () {
-		String maskedDstAddr = dstAddr.substring (0, dstAddr.lastIndexOf ('.'));
-		maskedDstAddr += ".X";
+		int i = 0;
+		String maskedDstAddr = new String();
+		if (version == 4) {
+			maskedDstAddr = dstAddr.substring (0, dstAddr.lastIndexOf ('.'));
+			maskedDstAddr += ".X";
+		}		
+		if (version == 6) {
+			String[] addrParts = dstAddr.split (":");
+			for (String part : addrParts) {
+				if (i < 4)
+					maskedDstAddr += (part + ":");
+				else
+					/* avoid colon after the last X. */
+					if (i != addrParts.length - 1)
+						maskedDstAddr += "X:";
+					else
+						maskedDstAddr += "X";
+				i++;
+			}
+		}
 		return maskedDstAddr;
 	}
 }
