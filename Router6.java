@@ -1,28 +1,23 @@
 class Router6 extends Router {
+	
+	void initIpTable () {
+		// TODO: how to initially fill the routing table? a better way than hard-coding?
+		/* arg1: destination subnet
+		 * arg2: local (this router) interface to put the packet on
+		 */
+		routingTable.put ("192.168.0.X", 0);
+	}
+
 	Router6 (Router myNext, Router myPrev) {
 		super();
 		connectedRouters.add (myNext);
 		connectedRouters.add (myPrev);
-		// TODO: how to initially fill the routing table?
-		routingTable.put ("192.168.0.2", 0);
+		initIpTable();
 		type = "v6";
 	}
 
-	void forward (String nextRouterIpAddr) {
-
-	}
-
-	void route4 (Packet packet) {
-		if ( routingTable.containsKey (packet.getDst()) ) {
-			Integer targetInterface = routingTable.get (packet.getDst());
-			Router targetRouter = connectedRouters.get(targetInterface);
-			targetRouter.recv (packet);
-		}
-		else {
-			System.err.println ("route not found: " + packet.getDst());
-		}
-	}
-
+	/* in practice, route function should only take the packet to route. next router
+	 * is passed here so that the router knows whether it should tunnel or not. */
 	public void route (Router next, Packet packet) {
 		if (next.getType().equals ("v4")) {
 			if (packet.getVersion() == 6) {
@@ -32,7 +27,7 @@ class Router6 extends Router {
 			and routed as a normal v4 packet.
 			in case 'packet' was ipv4, it's not manipulated and is normally routed
 			like v4. */
-			route4 (packet);
+			super.route (packet); /* normal routing. */
 		}
 		else if (next.getType().equals ("v6")) {
 			/* how a v6 router notices if the newly arrived v4 packet was a 
