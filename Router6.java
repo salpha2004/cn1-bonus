@@ -8,10 +8,6 @@ class Router6 extends Router {
 		type = "v6";
 	}
 
-	void forward (String nextRouterIpAddr) {
-
-	}
-
 	void route4 (Packet packet) {
 		if ( routingTable.containsKey (packet.getDst()) ) {
 			Integer targetInterface = routingTable.get (packet.getDst());
