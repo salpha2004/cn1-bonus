@@ -10,7 +10,7 @@ class Router {
 	HashMap<String, Integer> routingTable;
 	/* list of directly connected routers to this router. */
 	Vector<Router> connectedRouters;
-	/* router type: v4 or v6 */
+	/* router type: "v4" or "v6" */
 	String type;
 	String addr;
 
@@ -22,10 +22,6 @@ class Router {
 	public String getType () {
 		return type;
 	}
-<<<<<<< HEAD
-	/* function 'recv' is called by other routers when they want to
-	 * pass a packet to this router. */
-=======
 
 	public Router nextRouter (Packet packet) {
 		Router targetRouter = null;
@@ -48,8 +44,9 @@ class Router {
 		}
 	}
 
-	/* addr is the subnet address (i.e. combined with subnet mask. e.g. 192.168.1.X)
-	 * ifNo is the interface number which packets destined for 'addr' should be sent to.
+	/* 'addr' is the subnet address (i.e. combined with subnet mask. e.g. 192.168.1.X for subnet 24).
+	 * subnet should always be written with "X"s.
+	 * 'ifNo' is the interface number which packets destined for 'addr' should be sent to.
 	 */
 	public void addRoute (String addr, int ifNo) {
 		// TODO: how to initially fill the routing table? a better way than hard-coding?
@@ -59,10 +56,11 @@ class Router {
 		routingTable.put (addr, ifNo);
 	}
 
->>>>>>> 63aa34d0d0ff07d8dbbd4d260a9663a9a56809d9
+	/* function 'recv' is called by other routers when they want to
+	 * pass a packet to this router. */
 	public void recv (Packet packet) {
-		System.out.println ("src: " + packet.getSrc());
-		System.out.println ("dst: " + packet.getDst());
-		System.out.println ("## ROUTED ##");
+		System.out.println ("## ROUTED ##   src: " + packet.getSrc());
+		System.out.println ("## ROUTED ##   dst: " + packet.getDst());
+		System.out.println ("-------------");
 	}
 }

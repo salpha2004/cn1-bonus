@@ -8,7 +8,6 @@ class Router6 extends Router {
 		type = "v6";
 	}
 
-<<<<<<< HEAD
 	void route4 (Packet packet) {
 		if ( routingTable.containsKey (packet.getDst()) ) {
 			Integer targetInterface = routingTable.get (packet.getDst());
@@ -20,26 +19,22 @@ class Router6 extends Router {
 		}
 	}
 
-	public void route (Router next, Packet packet) {
-=======
-	void pack (Packet packet) {
+	void encapsulate (Packet packet) {
+/*
 		Packet original = new Packet(packet);
 		packet.setData (original);
 		packet.setVersionTo4 ();
-		packet.setSrc (addr);
+		packet.setSrc (addr); */
 		//packet.setDst (); // TODO: how to find dst addr?
 	}
 
-	/* in practice, route function should only take the packet to route. next router
-	 * is passed here so that the router knows whether it should tunnel or not. */
 	@Override
 	public void route (Packet packet) {
 		Router next = super.nextRouter (packet);
 		/* ask the next router in the route if it supports IPv6. */
->>>>>>> 63aa34d0d0ff07d8dbbd4d260a9663a9a56809d9
 		if (next.getType().equals ("v4")) {
 			if (packet.getVersion() == 6) {
-				pack (packet);
+				encapsulate (packet);
 			}
 			/* in case 'packet' was ipv6, it's wrapped in an ipv4 packet above,
 			and routed as a normal v4 packet.
